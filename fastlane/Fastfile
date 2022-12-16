@@ -46,6 +46,7 @@ platform :android do
       }
     )
 
+    # Aquí comienza la configuración para distribuir en Firebase
     firebase_app_distribution(
 
       # Aquí indicaremos nuestro "ID de la app" que se encuentra
@@ -59,6 +60,59 @@ platform :android do
       # Y en testers los e-mails de las personas a las que queremos
       # enviarles la versión de prueba
       testers: "test@test.com, tst@tst.com"
+    )
+
+  end
+
+  desc "Lanzarás una versión a Play Console"
+  lane :internalTest do
+
+    # Esto servirá para indicar la contraseña del Alias y de la firma por consola
+    # Por supuesto, al ser un dato privado, no se verá la contraseña que escribas en la terminal
+    store_password = prompt(text: "Signing Store Password: ", secure_text: true)
+    key_password = prompt(text: "Alias Key Password: ", secure_text: true)
+
+    # ¡Atención! Para Play Store, en las nuevas aplicaciones ya no está permitido
+    # el subir actualizaciones o aplicaciones con archivos APK, por lo que aconsejo
+    # que se lance con la tast "bundle" que generará un Android App Bundle
+    # En caso de querer un APK ejecuta la task "assemble"
+    gradle(
+      task: 'bundle',
+      build_type: 'Release',
+      print_command: false,
+      properties: {
+
+        # Aquí indicaremos la ruta en la que se encuentra nuestra keystore
+        "android.injected.signing.store.file" => "",
+        "android.injected.signing.store.password" => store_password,
+
+        # Aquí indicaremos el alias de nuestro keystore tal y como haríamos en Android Studio
+        "android.injected.signing.key.alias" => "",
+        "android.injected.signing.key.password" => key_password
+      }
+    )
+
+    # Aquí comienza la configuración para distribuir en Play Store
+    # ¡Recuerda! Para tener esta posibilidad de lanzamiento a la Play Store,
+    # es necesario haber configurado "Supply" junto con Fastlane
+    upload_to_play_store(
+
+      # En track tenemos las opciones de lanzamiento igual que en la Play Store
+      # Las opciones disponibles son: production, beta, alpha, internal
+      # Por defecto está aplicada la opción de "production"
+      track: 'internal',
+
+      # Con estas opciones podemos saltar que haga el proceso de subir las imágenes
+      # traducciones de la ficha de la Play Store, e incluso las capturas de pantalla
+      # Esto se puede activar en cualquier momento y editar en la carpeta que se genera
+      # dentro de "fastlane > metadata"
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+
+      # Saltamos la opción de subir APK puesto que lo que subimos a la Play Store es
+      # Android App Bundle, si no quisiéramos que saltase ese proceso, lo ponemos a "false"
+      skip_upload_apk: true
     )
 
   end
