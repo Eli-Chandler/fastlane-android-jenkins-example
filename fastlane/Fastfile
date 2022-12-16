@@ -1,0 +1,66 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+
+  desc "Lanzarás una versión a Firebase en App Distribution"
+  lane :deployInFirebase do
+    
+    # Esto servirá para indicar la contraseña del Alias y de la firma por consola
+    # Por supuesto, al ser un dato privado, no se verá la contraseña que escribas en la terminal
+    store_password = prompt(text: "Signing Store Password: ", secure_text: true)
+    key_password = prompt(text: "Alias Key Password: ", secure_text: true)
+
+    # Esto servirá para indicar la contraseña del Alias y de la firma por consola
+    gradle(
+
+      # ¡Atención! En task tenemos las siguientes opciones
+      # - assemble: Generará un APK
+      # - bundle: Generará un Android App Bundle
+      task: 'assemble',
+      build_type: 'Release',
+      print_command: false,
+      properties: {
+
+        # Aquí indicaremos la ruta en la que se encuentra nuestra keystore
+        "android.injected.signing.store.file" => "",
+        "android.injected.signing.store.password" => store_password,
+
+        # Aquí indicaremos el alias de nuestro keystore tal y como haríamos en Android Studio
+        "android.injected.signing.key.alias" => "",
+        "android.injected.signing.key.password" => key_password
+      }
+    )
+
+    firebase_app_distribution(
+
+      # Aquí indicaremos nuestro "ID de la app" que se encuentra
+      # en la configuración del proyecto en Firebase
+      app: "",
+
+      # En las notas podremos incluir el changelog o la información
+      # que queremos que les llegue a nuestros testers
+      release_notes: "Mi app tiene nuevas características ¡Pruébalas!",
+
+      # Y en testers los e-mails de las personas a las que queremos
+      # enviarles la versión de prueba
+      testers: "test@test.com, tst@tst.com"
+    )
+
+  end
+
+end

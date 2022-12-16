@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Fastlane</string>
+    <string name="extra_info">Revisa la carpeta de \"fastlane\" - Ahí encontrarás los ficheros necesarios para lanzar el comando fastlane y lanzar la versión de tu app a Firebase o Google Play de forma sencilla</string>
+</resources>
