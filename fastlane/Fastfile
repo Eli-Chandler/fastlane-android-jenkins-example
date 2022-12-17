@@ -117,4 +117,14 @@ platform :android do
 
   end
 
+  desc "Lanzamiento de las versiones en Firebase y Google Play"
+  lane :releaseAll do
+
+    # Podremos ejecutar un comando que ejecute varios a la vez, de esta forma podremos realizar
+    # subidas a varias plataformas en una sola ejecucción
+    deployInFirebase
+    internalTest
+
+  end
+
 end
