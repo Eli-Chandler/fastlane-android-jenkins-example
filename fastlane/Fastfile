@@ -22,8 +22,8 @@ platform :android do
     
     # Esto servirá para indicar la contraseña del Alias y de la firma por consola
     # Por supuesto, al ser un dato privado, no se verá la contraseña que escribas en la terminal
-    store_password = prompt(text: "Signing Store Password: ", secure_text: true)
-    key_password = prompt(text: "Alias Key Password: ", secure_text: true)
+    # store_password = prompt(text: "Signing Store Password: ", secure_text: true)
+    # key_password = prompt(text: "Alias Key Password: ", secure_text: true)
 
     # Esto servirá para indicar la contraseña del Alias y de la firma por consola
     gradle(
@@ -34,33 +34,33 @@ platform :android do
       task: 'assemble',
       build_type: 'Release',
       print_command: false,
-      properties: {
-
-        # Aquí indicaremos la ruta en la que se encuentra nuestra keystore
-        "android.injected.signing.store.file" => "",
-        "android.injected.signing.store.password" => store_password,
+      #properties: {
+      #
+      #  # Aquí indicaremos la ruta en la que se encuentra nuestra keystore
+      #  "android.injected.signing.store.file" => "",
+      #  "android.injected.signing.store.password" => store_password,
 
         # Aquí indicaremos el alias de nuestro keystore tal y como haríamos en Android Studio
-        "android.injected.signing.key.alias" => "",
-        "android.injected.signing.key.password" => key_password
-      }
+      #  "android.injected.signing.key.alias" => "",
+      #  "android.injected.signing.key.password" => key_password
+      #}
     )
 
     # Aquí comienza la configuración para distribuir en Firebase
-    firebase_app_distribution(
-
-      # Aquí indicaremos nuestro "ID de la app" que se encuentra
-      # en la configuración del proyecto en Firebase
-      app: "",
-
-      # En las notas podremos incluir el changelog o la información
-      # que queremos que les llegue a nuestros testers
-      release_notes: "Mi app tiene nuevas características ¡Pruébalas!",
-
-      # Y en testers los e-mails de las personas a las que queremos
-      # enviarles la versión de prueba
-      testers: "test@test.com, tst@tst.com"
-    )
+#    firebase_app_distribution(
+#
+#      # Aquí indicaremos nuestro "ID de la app" que se encuentra
+#      # en la configuración del proyecto en Firebase
+#      app: "",
+#
+#      # En las notas podremos incluir el changelog o la información
+#      # que queremos que les llegue a nuestros testers
+#      release_notes: "Mi app tiene nuevas características ¡Pruébalas!",
+#
+#      # Y en testers los e-mails de las personas a las que queremos
+#      # enviarles la versión de prueba
+#      testers: "test@test.com, tst@tst.com"
+#    )
 
   end
 
