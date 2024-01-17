@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'fastlane' }
+    agent { label 'fastlane-android' }
 
     environment {
         ARTIFACTORY_API_KEY = credentials('artifactory-api-key')
