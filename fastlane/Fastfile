@@ -34,33 +34,29 @@ platform :android do
       task: 'assemble',
       build_type: 'Release',
       print_command: false,
-      #properties: {
-      #
+      properties: {
       #  # Aquí indicaremos la ruta en la que se encuentra nuestra keystore
-      #  "android.injected.signing.store.file" => "",
-      #  "android.injected.signing.store.password" => store_password,
+        "android.injected.signing.store.file" => "../jenkins.keystore",
+        "android.injected.signing.store.password" => "password",
 
         # Aquí indicaremos el alias de nuestro keystore tal y como haríamos en Android Studio
-      #  "android.injected.signing.key.alias" => "",
-      #  "android.injected.signing.key.password" => key_password
-      #}
+        "android.injected.signing.key.alias" => "jenkins",
+        "android.injected.signing.key.password" => "password"
+      }
     )
 
-    # Aquí comienza la configuración para distribuir en Firebase
-#    firebase_app_distribution(
-#
-#      # Aquí indicaremos nuestro "ID de la app" que se encuentra
-#      # en la configuración del proyecto en Firebase
-#      app: "",
-#
-#      # En las notas podremos incluir el changelog o la información
-#      # que queremos que les llegue a nuestros testers
-#      release_notes: "Mi app tiene nuevas características ¡Pruébalas!",
-#
-#      # Y en testers los e-mails de las personas a las que queremos
-#      # enviarles la versión de prueba
-#      testers: "test@test.com, tst@tst.com"
-#    )
+    artifactory_api_key = ENV["ARTIFACTORY_API_KEY"]
+    artifactory_endpoint = ENV["ARTIFACTORY_ENDPOINT"]
+    artifactory_repo = ENV["ARTIFACTORY_REPO"]
+    artifactory_repo_path = ENV["ARTIFACTORY_REPO_PATH"]
+
+    artifactory(
+      api_key: artifactory_api_key,
+      endpoint: artifactory_endpoint,
+      file: "app/build/outputs/apk/release/app-release.apk",  # File to upload
+      repo: artifactory_repo,       # Artifactory repo
+      repo_path: artifactory_repo_path   # Path to place the artifact including its filename
+    )
 
   end
 
