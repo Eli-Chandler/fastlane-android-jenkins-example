@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         ARTIFACTORY_API_KEY = credentials('artifactory-api-key')
-        ARTIFACTORY_ENDPOINT = 'https://artifactory.infra-go.net/artifactory/
+        ARTIFACTORY_ENDPOINT = 'https://artifactory.infra-go.net/artifactory/'
         ARTIFACTORY_REPO = 'minigame-android'
         ARTIFACTORY_REPO_PATH = 'v1'
     }
