@@ -26,6 +26,9 @@ platform :android do
     # key_password = prompt(text: "Alias Key Password: ", secure_text: true)
 
     # Esto servirá para indicar la contraseña del Alias y de la firma por consola
+
+    keystore_path = ENV["KEYSTORE_PATH"]
+
     gradle(
 
       # ¡Atención! En task tenemos las siguientes opciones
@@ -35,7 +38,7 @@ platform :android do
       build_type: 'Release',
       print_command: false,
 
-      keystore_path = ENV["KEYSTORE_PATH"]
+
 
       properties: {
       #  # Aquí indicaremos la ruta en la que se encuentra nuestra keystore
