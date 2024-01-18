@@ -24,7 +24,12 @@ pipeline {
     stages {
         stage('Install bundle') {
             steps {
-                sh 'bundle install'
+                sh (
+                    script: '''
+                    #!/bin/bash
+                    bundle install
+                    '''
+                )
             }
         }
 
