@@ -1,5 +1,7 @@
 pipeline {
-    agent { label 'fastlane-android' }
+        docker {
+            image 'elichandler/docker-android-fastlane-bash-entrypoint:latest'
+        }
 
     environment {
         ARTIFACTORY_API_KEY = credentials('artifactory-api-key')
