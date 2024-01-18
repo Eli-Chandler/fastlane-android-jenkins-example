@@ -39,7 +39,7 @@ platform :android do
 
       properties: {
       #  # Aquí indicaremos la ruta en la que se encuentra nuestra keystore
-        "android.injected.signing.store.file" => keystore_path,
+        "android.injected.signing.store.file" => "#{keystore_path}",
         "android.injected.signing.store.password" => "password",
 
         # Aquí indicaremos el alias de nuestro keystore tal y como haríamos en Android Studio
