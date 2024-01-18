@@ -1,9 +1,18 @@
 pipeline {
-    agent {
-        docker {
-            image 'elichandler/docker-android-fastlane-bash-entrypoint:latest'
-        }
+  agent {
+    kubernetes {
+      yaml '''
+      spec:
+        containers:
+        - name: fastlane-builder
+          image: elichandler/docker-android-fastlane-bash-entrypoint:latest
+          command:
+          - sleep
+          args:
+          - 99d
+      '''
     }
+  }
 
     environment {
         ARTIFACTORY_API_KEY = credentials('artifactory-api-key')
@@ -15,7 +24,7 @@ pipeline {
     stages {
         stage('Install bundle') {
             steps {
-                bat 'bundle install'
+                sh 'bundle install'
             }
         }
 
@@ -28,7 +37,7 @@ pipeline {
                              "ARTIFACTORY_REPO=${ARTIFACTORY_REPO}",
                              "ARTIFACTORY_REPO_PATH=${ARTIFACTORY_REPO_PATH}",
                              "KEYSTORE_PATH=${KEYSTORE}"]) {
-                        bat 'bundle exec fastlane deployInFirebase'
+                        sh 'bundle exec fastlane deployInFirebase'
 
                     }
                 }
