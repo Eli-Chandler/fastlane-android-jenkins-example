@@ -1,6 +1,7 @@
 pipeline {
   agent {
     kubernetes {
+       defaultContainer 'fastlane-builder'
       yaml '''
       spec:
         containers:
