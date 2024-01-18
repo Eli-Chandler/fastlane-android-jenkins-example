@@ -34,9 +34,12 @@ platform :android do
       task: 'assemble',
       build_type: 'Release',
       print_command: false,
+
+      keystore_path = ENV["KEYSTORE_PATH"]
+
       properties: {
       #  # Aquí indicaremos la ruta en la que se encuentra nuestra keystore
-        "android.injected.signing.store.file" => "../jenkins.keystore",
+        "android.injected.signing.store.file" => keystore_path,
         "android.injected.signing.store.password" => "password",
 
         # Aquí indicaremos el alias de nuestro keystore tal y como haríamos en Android Studio
@@ -44,7 +47,6 @@ platform :android do
         "android.injected.signing.key.password" => "password"
       }
     )
-
     artifactory_api_key = ENV["ARTIFACTORY_API_KEY"]
     artifactory_endpoint = ENV["ARTIFACTORY_ENDPOINT"]
     artifactory_repo = ENV["ARTIFACTORY_REPO"]

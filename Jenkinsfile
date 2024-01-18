@@ -14,22 +14,19 @@ pipeline {
                 bat 'bundle install'
             }
         }
-        stage('Create Keystore file') {
-            steps {
-                withCredentials([file(credentialsId: 'temp-android-keystore-file', variable: 'KEYSTORE')]) {
-                    bat "echo ${KEYSTORE} > jenkins.keystore"
-                }
-            }
-        }
 
         stage('Run fastlane') {
             steps {
                 // Set environment variables
-                withEnv(["ARTIFACTORY_API_KEY=${ARTIFACTORY_API_KEY}",
-                         "ARTIFACTORY_ENDPOINT=${ARTIFACTORY_ENDPOINT}",
-                         "ARTIFACTORY_REPO=${ARTIFACTORY_REPO}",
-                         "ARTIFACTORY_REPO_PATH=${ARTIFACTORY_REPO_PATH}"]) {
-                    bat 'bundle exec fastlane deployInFirebase'
+                withCredentials([file(credentialsId: 'temp-android-keystore-file', variable: 'KEYSTORE')]) {
+                    withEnv(["ARTIFACTORY_API_KEY=${ARTIFACTORY_API_KEY}",
+                             "ARTIFACTORY_ENDPOINT=${ARTIFACTORY_ENDPOINT}",
+                             "ARTIFACTORY_REPO=${ARTIFACTORY_REPO}",
+                             "ARTIFACTORY_REPO_PATH=${ARTIFACTORY_REPO_PATH}",
+                             "KEYSTORE_PATH=${KEYSTORE}"]) {
+                        bat 'bundle exec fastlane deployInFirebase'
+
+                    }
                 }
             }
         }
