@@ -14,6 +14,14 @@ pipeline {
                 bat 'bundle install'
             }
         }
+        stage('Create Keystore file') {
+            steps {
+                withCredentials([file(credentialsId: 'temp-android-keystore-file', variable: 'KEYSTORE')]) {
+                    bat "echo ${KEYSTORE} > jenkins.keystore"
+                }
+            }
+        }
+
         stage('Run fastlane') {
             steps {
                 // Set environment variables
