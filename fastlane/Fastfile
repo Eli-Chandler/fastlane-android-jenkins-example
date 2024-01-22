@@ -18,7 +18,7 @@ default_platform(:android)
 platform :android do
 
   desc "Lanzarás una versión a Firebase en App Distribution"
-  lane :deployInFirebase do
+  lane :deployInArtifactoryAndAppCenter do
     
     # Esto servirá para indicar la contraseña del Alias y de la firma por consola
     # Por supuesto, al ser un dato privado, no se verá la contraseña que escribas en la terminal
@@ -38,8 +38,6 @@ platform :android do
       build_type: 'Release',
       print_command: false,
 
-
-
       properties: {
       #  # Aquí indicaremos la ruta en la que se encuentra nuestra keystore
         "android.injected.signing.store.file" => "#{keystore_path}",
@@ -50,6 +48,7 @@ platform :android do
         "android.injected.signing.key.password" => "password"
       }
     )
+
     artifactory_api_key = ENV["ARTIFACTORY_API_KEY"]
     artifactory_endpoint = ENV["ARTIFACTORY_ENDPOINT"]
     artifactory_repo = ENV["ARTIFACTORY_REPO"]
@@ -63,6 +62,13 @@ platform :android do
       repo_path: artifactory_repo_path   # Path to place the artifact including its filename
     )
 
+    appcenter_upload(
+        api_token: ENV["APPCENTER_API_TOKEN"],
+        owner_name: ENV["APPCENTER_OWNER_NAME"],
+        app_name: ENV["APPCENTER_APP_NAME"],
+        file: "app/build/outputs/apk/release/app-release.apk"
+        notify_testers: true
+    )
   end
 
   desc "Lanzarás una versión a Play Console"

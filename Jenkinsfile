@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-       defaultContainer 'fastlane-builder'
+      defaultContainer 'fastlane-builder'
       yaml '''
       spec:
         containers:
@@ -20,6 +20,9 @@ pipeline {
         ARTIFACTORY_ENDPOINT = 'https://artifactory.infra-go.net/artifactory/'
         ARTIFACTORY_REPO = 'minigame-android'
         ARTIFACTORY_REPO_PATH = 'v1'
+        APPCENTER_API_TOKEN = credentials('appcenter-api-token')
+        APPCENTER_OWNER_NAME = 'eli.chandler-gmail.com'
+        APPCENTER_APP_NAME = 'my-app'
     }
 
     stages {
@@ -29,6 +32,7 @@ pipeline {
                     script: '''
                     #!/bin/bash
                     bundle install
+                    bundle exec fastlane add_plugin appcenter
                     '''
                 )
             }
@@ -42,8 +46,13 @@ pipeline {
                              "ARTIFACTORY_ENDPOINT=${ARTIFACTORY_ENDPOINT}",
                              "ARTIFACTORY_REPO=${ARTIFACTORY_REPO}",
                              "ARTIFACTORY_REPO_PATH=${ARTIFACTORY_REPO_PATH}",
-                             "KEYSTORE_PATH=${KEYSTORE}"]) {
-                        sh 'bundle exec fastlane deployInFirebase'
+                             "KEYSTORE_PATH=${KEYSTORE}",
+                             "APPCENTER_API_TOKEN=${APPCENTER_API_TOKEN}",
+                             "APPCENTER_OWNER_NAME=${APPCENTER_OWNER_NAME}",
+                             "APPCENTER_APP_NAME=${APPCENTER_APP_NAME}",
+                             ],
+                    ) {
+                        sh 'bundle exec fastlane deployInArtifactoryAndAppCenter'
 
                     }
                 }
