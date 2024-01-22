@@ -32,7 +32,6 @@ pipeline {
                     script: '''
                     #!/bin/bash
                     bundle install
-                    bundle exec fastlane add_plugin appcenter
                     '''
                 )
             }
